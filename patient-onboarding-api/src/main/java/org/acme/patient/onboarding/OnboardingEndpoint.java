@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import java.util.List;
 
 @ApplicationScoped
@@ -26,8 +27,8 @@ public class OnboardingEndpoint {
     List<Doctor> doctors;
 
     @POST
-    @Path("assignhospital")
-    public synchronized Hospital assignHospitalToPatient(String zip) {
+    @Path("/assignhospital/{zip}")
+    public synchronized Hospital assignHospitalToPatient(@PathParam("zip") String zip) {
         Hospital hospital = hospitals.stream().filter(h -> h.getZip().equals(zip))
                 .findFirst()
                 .orElse(new Hospital("Local Hospital","123 Local Street", "555-55-5555", "12345"));
@@ -36,8 +37,8 @@ public class OnboardingEndpoint {
     }
 
     @POST
-    @Path("assigndoctor")
-    public synchronized Doctor assignDoctorToPatient(String condition) {
+    @Path("/assigndoctor/{condition}")
+    public synchronized Doctor assignDoctorToPatient(@PathParam("condition") String condition) {
         Doctor doctor = doctors.stream().filter(d -> d.getSpecialty().equals(condition))
                 .findFirst()
                 .orElse(new Doctor("Michael Scott", "img/docfemale.png", "General"));
@@ -45,8 +46,8 @@ public class OnboardingEndpoint {
     }
 
     @POST
-    @Path("notify")
-    public synchronized void notifyPatient(String contact) {
+    @Path("/notify/{contact}")
+    public synchronized void notifyPatient(@PathParam("contact") String contact) {
         // do nothing here for demo...
         // irl would send email or text message or both
     }
